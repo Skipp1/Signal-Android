@@ -218,10 +218,6 @@ public class ComposeText extends EmojiEditText {
     if (isLandscape()) setImeActionLabel(getContext().getString(messageSendType.getComposeHintRes()), EditorInfo.IME_ACTION_SEND);
     else               setImeActionLabel(null, 0);
 
-    if (useSystemEmoji) {
-      inputType = (inputType & ~InputType.TYPE_MASK_VARIATION) | InputType.TYPE_TEXT_VARIATION_SHORT_MESSAGE;
-    }
-
     setImeOptions(imeOptions);
     setHint(getContext().getString(messageSendType.getComposeHintRes()));
     setInputType(inputType);
