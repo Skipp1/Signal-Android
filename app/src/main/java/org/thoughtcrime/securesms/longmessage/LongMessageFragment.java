@@ -107,15 +107,15 @@ public class LongMessageFragment extends FullScreenDialogFragment {
 
       ViewGroup bubble;
 
-      if (message.get().getMessageRecord().isOutgoing()) {
-        bubble = sentBubble.get();
+      if (!message.get().getMessageRecord().isOutgoing()) {
+        bubble = receivedBubble.get();
         colorizerView.setVisibility(View.VISIBLE);
         colorizerView.setBackground(message.get().getMessageRecord().getToRecipient().getChatColors().getChatBubbleMask());
         bubble.getBackground().setColorFilter(message.get().getMessageRecord().getToRecipient().getChatColors().getChatBubbleColorFilter());
         bubble.addOnLayoutChangeListener(bubbleLayoutListener);
         bubbleLayoutListener.onLayoutChange(bubble, 0, 0, 0, 0, 0, 0, 0, 0);
       } else {
-        bubble = receivedBubble.get();
+        bubble = sentBubble.get();
         bubble.getBackground().setColorFilter(ContextCompat.getColor(requireContext(), R.color.signal_background_secondary), PorterDuff.Mode.MULTIPLY);
       }
 
@@ -133,7 +133,7 @@ public class LongMessageFragment extends FullScreenDialogFragment {
       text.setTextSize(TypedValue.COMPLEX_UNIT_SP, SignalStore.settings().getMessageFontSize());
       text.setTextAsync(body);
 
-      if (!message.get().getMessageRecord().isOutgoing()) {
+      if (message.get().getMessageRecord().isOutgoing()) {
         text.setMentionBackgroundTint(ContextCompat.getColor(requireContext(), ThemeUtil.isDarkTheme(requireActivity()) ? R.color.core_grey_60 : R.color.core_grey_20));
       } else {
         text.setMentionBackgroundTint(ContextCompat.getColor(requireContext(), R.color.transparent_black_40));

@@ -64,6 +64,9 @@ public class ConversationTypingView extends ConstraintLayout {
     badge3.setVisibility(GONE);
     typistCount.setVisibility(GONE);
 
+
+    Recipient typist = typists.get(0);
+
     if (isGroupThread) {
       presentGroupThreadAvatars(requestManager, typists);
     }
@@ -73,8 +76,9 @@ public class ConversationTypingView extends ConstraintLayout {
       typistCount.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.conversation_item_recv_bubble_color_wallpaper), PorterDuff.Mode.SRC_IN);
       indicator.setDotTint(ContextCompat.getColor(getContext(), R.color.conversation_typing_indicator_foreground_tint_wallpaper));
     } else {
-      bubble.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.conversation_item_recv_bubble_color_normal));
-      typistCount.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.conversation_item_recv_bubble_color_normal), PorterDuff.Mode.SRC_IN);
+      bubble.setBackgroundColor(typist.getChatColors().asSingleColor());
+      typistCount.getBackground().setColorFilter(typist.getChatColors().asSingleColor(), PorterDuff.Mode.SRC_IN);
+      // TODO color 
       indicator.setDotTint(ContextCompat.getColor(getContext(), R.color.conversation_typing_indicator_foreground_tint_normal));
     }
 
