@@ -1,3 +1,19 @@
+# What Is Different In This Fork 
+ 
+1. colours are now on the correct side (the person you are talking to is colourful and you are grey) 
+2. fixed a small but relating to input setting when using the system emojis 
+ 
+## Still To Do 
+ 
+1. The colour fixes are by no means complete, I have not tested when using gify / other fancy texts so some of them may have t
+he wrong colours. 
+ 
+2. quote colours are still badly behaved sometimes 
+ 
+3. typing indicators in group chats 
+ 
+4. names of people in group chats are still coloured and so it can be hard to see the name sometimes 
+
 # Signal Android
 
 Signal is a simple, powerful, and secure messenger.
