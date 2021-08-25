@@ -832,12 +832,11 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     bodyText.setLinkTextColor(colorizer.getIncomingBodyTextColor(context, hasWallpaper));
 
     if (messageRecord.isOutgoing() && !messageRecord.isRemoteDelete()) {
-      bodyBubble.getBackground().setColorFilter(recipient.getChatColors().getChatBubbleColorFilter());
-      bodyText.setTextColor(colorizer.getOutgoingBodyTextColor(context));
-      bodyText.setLinkTextColor(colorizer.getOutgoingBodyTextColor(context));
-      footer.setTextColor(colorizer.getOutgoingFooterTextColor(context));
-      footer.setIconColor(colorizer.getOutgoingFooterIconColor(context));
-      footer.setRevealDotColor(colorizer.getOutgoingFooterIconColor(context));
+      
+      bodyBubble.getBackground().setColorFilter(getDefaultBubbleColor(hasWallpaper), PorterDuff.Mode.SRC_IN);
+      footer.setTextColor(ContextCompat.getColor(context, R.color.signal_text_secondary));
+      footer.setIconColor(ContextCompat.getColor(context, R.color.signal_text_secondary));
+
       footer.setOnlyShowSendingStatus(false, messageRecord);
     } else if (messageRecord.isRemoteDelete()) {
       if (hasWallpaper) {
@@ -850,9 +849,14 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       footer.setTextColor(ContextCompat.getColor(context, R.color.signal_text_secondary));
       footer.setOnlyShowSendingStatus(messageRecord.isRemoteDelete(), messageRecord);
     } else {
-      bodyBubble.getBackground().setColorFilter(getDefaultBubbleColor(hasWallpaper), PorterDuff.Mode.SRC_IN);
-      footer.setTextColor(colorizer.getIncomingFooterTextColor(context, hasWallpaper));
-      footer.setIconColor(colorizer.getIncomingFooterIconColor(context, hasWallpaper));
+      bodyBubble.getBackground().setColorFilter(recipient.getChatColors().asSingleColor(), PorterDuff.Mode.SRC_IN);
+
+      bodyText.setTextColor(colorizer.getOutgoingBodyTextColor(context));
+      bodyText.setLinkTextColor(colorizer.getOutgoingBodyTextColor(context));
+      footer.setTextColor(colorizer.getOutgoingFooterTextColor(context));
+      footer.setIconColor(colorizer.getOutgoingFooterIconColor(context));
+      footer.setRevealDotColor(colorizer.getOutgoingFooterIconColor(context));
+
       footer.setRevealDotColor(colorizer.getIncomingFooterIconColor(context, hasWallpaper));
       footer.setOnlyShowSendingStatus(false, messageRecord);
     }
@@ -883,7 +887,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
   private void setAudioViewTint(MessageRecord messageRecord) {
     if (hasAudio(messageRecord)) {
-      if (!messageRecord.isOutgoing()) {
+      if (messageRecord.isOutgoing()) {
         if (hasWallpaper) {
           audioViewStub.get().setTint(getContext().getResources().getColor(R.color.conversation_item_incoming_audio_foreground_tint_wallpaper));
           audioViewStub.get().setProgressAndPlayBackgroundTint(getContext().getResources().getColor(R.color.conversation_item_incoming_audio_play_pause_background_tint_wallpaper));
@@ -1055,9 +1059,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       }
 
       if (messageRecord.isOutgoing()) {
-        bodyText.setMentionBackgroundTint(ContextCompat.getColor(context, R.color.transparent_black_25));
-      } else {
         bodyText.setMentionBackgroundTint(ContextCompat.getColor(context, ThemeUtil.isDarkTheme(context) ? R.color.core_grey_60 : R.color.core_grey_20));
+      } else {
+        bodyText.setMentionBackgroundTint(ContextCompat.getColor(context, R.color.transparent_black_25));
       }
 
       if (isContentCondensed()) {
@@ -1331,10 +1335,10 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
                                                     showControls,
                                                     false);
       if (!messageRecord.isOutgoing()) {
-        mediaThumbnailStub.require().setConversationColor(getDefaultBubbleColor(hasWallpaper));
+        mediaThumbnailStub.require().setConversationColor(Color.TRANSPARENT);
         mediaThumbnailStub.require().setStartTransferClickListener(downloadClickListener);
       } else {
-        mediaThumbnailStub.require().setConversationColor(Color.TRANSPARENT);
+        mediaThumbnailStub.require().setConversationColor(getDefaultBubbleColor(hasWallpaper));
         if (doAnySlidesLackData(slideDeck)) {
           mediaThumbnailStub.require().setStartTransferClickListener(downloadClickListener);
         } else {
@@ -2162,8 +2166,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   public @NonNull ProjectionList getSnapshotProjections(@NonNull ViewGroup coordinateRoot, boolean clipOutMedia, boolean outgoingOnly) {
     colorizerProjections.clear();
 
-    if ((messageRecord.isOutgoing() || !outgoingOnly) &&
-        !hasNoBubble(messageRecord) &&
+    if ((!messageRecord.isOutgoing() || !outgoingOnly) &&
+        !hasNoBubble(messageRecord)     &&
         !messageRecord.isRemoteDelete() &&
         bodyBubbleCorners != null &&
         bodyBubble.getVisibility() == VISIBLE)
@@ -2224,7 +2228,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       }
     }
 
-    if ((messageRecord.isOutgoing() || !outgoingOnly) &&
+    if ((!messageRecord.isOutgoing() || !outgoingOnly)  &&
         hasNoBubble(messageRecord) &&
         hasWallpaper &&
         bodyBubble.getVisibility() == VISIBLE)
@@ -2240,7 +2244,21 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         );
       }
     }
-
+// TODO color
+//     if (messageRecord.isOutgoing() &&
+//         hasQuote(messageRecord)     &&
+//         quoteView != null           &&
+//         bodyBubble.getVisibility() == VISIBLE)
+//     {
+//       bodyBubble.setQuoteViewProjection(quoteView.getProjection(bodyBubble));
+// 
+//       float bubbleOffsetFromScale = Util.halfOffsetFromScale(bodyBubble.getHeight(), bodyBubble.getScaleY());
+//       Projection cProj = quoteView.getProjection(coordinateRoot)
+//                                   .translateX(bodyBubble.getTranslationX() + this.getTranslationX() + Util.halfOffsetFromScale(quoteView.getWidth(), bodyBubble.getScaleX()))
+//                                   .translateY(bubbleOffsetFromScale - quoteView.getY() + (quoteView.getY() * bodyBubble.getScaleY()))
+//                                   .scale(bodyBubble.getScaleX());
+//       colorizerProjections.add(cProj);
+//     }
     for (int i = 0; i < colorizerProjections.size(); i++) {
       colorizerProjections.get(i).translateY(getTranslationY());
     }

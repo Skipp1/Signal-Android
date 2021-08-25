@@ -258,6 +258,19 @@ public class QuoteView extends ConstraintLayout implements RecipientForeverObser
       authorView.setText(author.isSelf() ? getContext().getString(R.string.QuoteView_you)
                                          : author.getDisplayName(getContext()));
     }
+// TODO color
+//     quoteBarView.setBackgroundColor(ContextCompat.getColor(getContext(), outgoing || isStoryReply() ? R.color.core_white : android.R.color.transparent));
+// 
+//     int mainViewColor;
+//     if (preview) {
+//       mainViewColor = R.color.quote_preview_background;
+//     } else if (outgoing && isStoryReply()) {
+//       mainViewColor = R.color.quote_incoming_story_background;
+//     } else {
+//       mainViewColor = R.color.quote_view_background;
+//     }
+// 
+//     mainView.setBackgroundColor(ContextCompat.getColor(getContext(), mainViewColor));
   }
 
   private boolean isStoryReply() {
