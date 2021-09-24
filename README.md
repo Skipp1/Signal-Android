@@ -5,8 +5,7 @@
  
 ## Still To Do 
  
-1. The colour fixes are by no means complete, I have not tested when using gify / other fancy texts so some of them may have t
-he wrong colours. 
+1. The colour fixes are by no means complete, I have not tested when using gify / other fancy texts so some of them may have the wrong colours. 
  
 2. quote colours are still badly behaved sometimes 
  
