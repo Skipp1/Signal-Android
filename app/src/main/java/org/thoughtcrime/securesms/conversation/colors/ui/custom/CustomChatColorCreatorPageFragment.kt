@@ -48,6 +48,7 @@ class CustomChatColorCreatorPageFragment :
 
   private lateinit var hueSlider: AppCompatSeekBar
   private lateinit var saturationSlider: AppCompatSeekBar
+  private lateinit var valueSlider: AppCompatSeekBar
   private lateinit var preview: ChatColorPreviewView
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,6 +65,7 @@ class CustomChatColorCreatorPageFragment :
 
     val hueThumb = ThumbDrawable(requireContext())
     val saturationThumb = ThumbDrawable(requireContext())
+    val valueThumb = ThumbDrawable(requireContext())
 
     val gradientTool: CustomChatColorGradientToolView = view.findViewById(R.id.gradient_tool)
     val save: View = view.findViewById(R.id.save)
@@ -93,19 +95,22 @@ class CustomChatColorCreatorPageFragment :
 
     hueSlider = view.findViewById(R.id.hue_slider)
     saturationSlider = view.findViewById(R.id.saturation_slider)
+    valueSlider = view.findViewById(R.id.value_slider)
 
     hueSlider.thumb = hueThumb
     saturationSlider.thumb = saturationThumb
+    valueSlider.thumb = valueThumb
 
     hueSlider.max = MAX_SEEK_DIVISIONS
     saturationSlider.max = MAX_SEEK_DIVISIONS
+    valueSlider.max = MAX_SEEK_DIVISIONS
 
     val colors: IntArray = (0..MAX_SEEK_DIVISIONS).map { hue ->
       ColorUtils.HSLToColor(
         floatArrayOf(
           hue.toHue(MAX_SEEK_DIVISIONS),
           1f,
-          calculateLightness(hue.toFloat(), valueFor60To80 = 0.4f)
+          0.5f
         )
       )
     }.toIntArray()
@@ -117,8 +122,12 @@ class CustomChatColorCreatorPageFragment :
     val saturationProgressDrawable = GradientDrawable().apply {
       orientation = GradientDrawable.Orientation.LEFT_RIGHT
     }
-
+    val valueProgressDrawable = GradientDrawable().apply {
+      orientation = GradientDrawable.Orientation.LEFT_RIGHT
+    }
+    
     saturationSlider.progressDrawable = saturationProgressDrawable.forSeekBar()
+    valueSlider.progressDrawable = valueProgressDrawable.forSeekBar()
 
     hueSlider.setOnSeekBarChangeListener(
       OnProgressChangedListener {
@@ -131,7 +140,13 @@ class CustomChatColorCreatorPageFragment :
         viewModel.setSaturationProgress(it)
       }
     )
-
+    
+    valueSlider.setOnSeekBarChangeListener(
+      OnProgressChangedListener {
+        viewModel.setValueProgress(it)
+      }
+    )
+    
     viewModel.events.observe(viewLifecycleOwner) { event ->
       when (event) {
         is CustomChatColorCreatorViewModel.Event.SaveNow -> {
@@ -166,11 +181,14 @@ class CustomChatColorCreatorPageFragment :
 
       hueSlider.progress = sliderState.huePosition
       saturationSlider.progress = sliderState.saturationPosition
+      valueSlider.progress = sliderState.valuePosition
 
       val color: Int = sliderState.getColor()
       hueThumb.setColor(sliderState.getHueColor())
       saturationThumb.setColor(color)
       saturationProgressDrawable.colors = sliderState.getSaturationColors()
+      valueThumb.setColor(color)
+      valueProgressDrawable.colors = sliderState.getValueColors()
 
       preview.setWallpaper(state.wallpaper)
 
@@ -231,7 +249,7 @@ class CustomChatColorCreatorPageFragment :
       floatArrayOf(
         hue,
         1f,
-        calculateLightness(hue, 0.4f)
+        valuePosition.toUnit(MAX_SEEK_DIVISIONS)
       )
     )
   }
@@ -243,14 +261,15 @@ class CustomChatColorCreatorPageFragment :
       floatArrayOf(
         hue,
         saturationPosition.toUnit(MAX_SEEK_DIVISIONS),
-        calculateLightness(hue)
+        valuePosition.toUnit(MAX_SEEK_DIVISIONS)
       )
     )
   }
 
   private fun ColorSlidersState.getSaturationColors(): IntArray {
     val hue = huePosition.toHue(MAX_SEEK_DIVISIONS)
-    val level = calculateLightness(hue)
+    val level = valuePosition.toUnit(MAX_SEEK_DIVISIONS)
+
 
     return listOf(0f, 1f).map {
       ColorUtils.HSLToColor(
@@ -258,6 +277,20 @@ class CustomChatColorCreatorPageFragment :
           hue,
           it,
           level
+        )
+      )
+    }.toIntArray()
+  }
+  
+  private fun ColorSlidersState.getValueColors(): IntArray {
+    val hue = huePosition.toHue(MAX_SEEK_DIVISIONS)
+    val sat = saturationPosition.toUnit(MAX_SEEK_DIVISIONS)
+    
+    
+    return listOf(0f, 1f).map {
+      ColorUtils.HSLToColor(
+        floatArrayOf(
+          hue, sat, it
         )
       )
     }.toIntArray()

@@ -4741,6 +4741,7 @@
     <string name="CustomChatColorCreatorFragment__gradient">Gradient</string>
     <string name="CustomChatColorCreatorFragment__hue">Hue</string>
     <string name="CustomChatColorCreatorFragment__saturation">Saturation</string>
+    <string name="CustomChatColorCreatorFragment__value">Lightness</string>
 
     <!-- CustomChatColorCreatorFragmentPage -->
     <string name="CustomChatColorCreatorFragmentPage__save">Save</string>
