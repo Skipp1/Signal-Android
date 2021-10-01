@@ -1,7 +1,10 @@
 # What Is Different In This Fork 
  
 1. colours are now on the correct side (the person you are talking to is colourful and you are grey) 
+
 2. fixed a small but relating to input setting when using the system emojis 
+
+3. added Lightness from the HSL model to the chat colour picker (Hue and Saturation already existed)
  
 ## Still To Do 
  
