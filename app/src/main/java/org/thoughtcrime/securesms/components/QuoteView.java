@@ -258,19 +258,6 @@ public class QuoteView extends ConstraintLayout implements RecipientForeverObser
       authorView.setText(author.isSelf() ? getContext().getString(R.string.QuoteView_you)
                                          : author.getDisplayName(getContext()));
     }
-// TODO color
-//     quoteBarView.setBackgroundColor(ContextCompat.getColor(getContext(), outgoing || isStoryReply() ? R.color.core_white : android.R.color.transparent));
-// 
-//     int mainViewColor;
-//     if (preview) {
-//       mainViewColor = R.color.quote_preview_background;
-//     } else if (outgoing && isStoryReply()) {
-//       mainViewColor = R.color.quote_incoming_story_background;
-//     } else {
-//       mainViewColor = R.color.quote_view_background;
-//     }
-// 
-//     mainView.setBackgroundColor(ContextCompat.getColor(getContext(), mainViewColor));
   }
 
   private boolean isStoryReply() {
@@ -507,7 +494,7 @@ public class QuoteView extends ConstraintLayout implements RecipientForeverObser
   }
 
   private void applyColorTheme() {
-    boolean isOutgoing = messageType != MessageType.INCOMING && messageType != MessageType.STORY_REPLY_INCOMING;
+    boolean isOutgoing = messageType == MessageType.INCOMING || messageType == MessageType.STORY_REPLY_INCOMING;
     boolean isPreview  = messageType == MessageType.PREVIEW || messageType == MessageType.STORY_REPLY_PREVIEW;
 
     QuoteViewColorTheme quoteViewColorTheme = QuoteViewColorTheme.resolveTheme(isOutgoing, isPreview, isWallpaperEnabled);
