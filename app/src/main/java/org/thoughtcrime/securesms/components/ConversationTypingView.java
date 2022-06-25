@@ -72,13 +72,12 @@ public class ConversationTypingView extends ConstraintLayout {
     }
 
     if (hasWallpaper) {
-      bubble.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.conversation_item_recv_bubble_color_wallpaper));
-      typistCount.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.conversation_item_recv_bubble_color_wallpaper), PorterDuff.Mode.SRC_IN);
+      bubble.setBackgroundColor(typist.getChatColors().asSingleColor());
+      typistCount.getBackground().setColorFilter(typist.getChatColors().asSingleColor(), PorterDuff.Mode.SRC_IN);
       indicator.setDotTint(ContextCompat.getColor(getContext(), R.color.conversation_typing_indicator_foreground_tint_wallpaper));
     } else {
       bubble.setBackgroundColor(typist.getChatColors().asSingleColor());
       typistCount.getBackground().setColorFilter(typist.getChatColors().asSingleColor(), PorterDuff.Mode.SRC_IN);
-      // TODO color 
       indicator.setDotTint(ContextCompat.getColor(getContext(), R.color.conversation_typing_indicator_foreground_tint_normal));
     }
 
