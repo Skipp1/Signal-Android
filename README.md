@@ -5,6 +5,8 @@
 2. fixed a small but relating to input setting when using the system emojis 
 
 3. added Lightness from the HSL model to the chat colour picker (Hue and Saturation already existed)
+
+4. Spaces in search are counted as part of the search (Searching for "Who " no longer returns "Whodunnit")
  
 ## Still To Do 
  
