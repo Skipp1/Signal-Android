@@ -262,15 +262,7 @@ class SearchTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
    * then append a * to the end of each token to turn it into a prefix query.
    */
   private fun createFullTextSearchQuery(query: String): String {
-    return query
-      .split(" ")
-      .map { it.trim() }
-      .filter { it.isNotEmpty() }
-      .map { fullTextSearchEscape(it) }
-      .joinToString(
-        separator = " ",
-        transform = { "$it*" }
-      )
+    return fullTextSearchEscape(query)
   }
 
   /**
