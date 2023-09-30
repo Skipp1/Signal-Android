@@ -9,10 +9,12 @@ import android.content.Context
 import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.conversation.ConversationMessage
 import org.thoughtcrime.securesms.conversation.v2.items.V2ConversationItemUtils.isThumbnailAtBottomOfBubble
 import org.thoughtcrime.securesms.util.hasNoBubble
+import org.thoughtcrime.securesms.recipients.Recipient
 
 /**
  * Color information for conversation items.
@@ -69,7 +71,18 @@ class V2ConversationItemTheme(
       return Color.TRANSPARENT
     }
 
-    return getFooterBubbleColor(conversationMessage)
+    Log.d("### Chat V2 Colour for : ", conversationMessage.messageRecord.getFromRecipient().getDisplayName(context)
+        + "\tis "+conversationMessage.messageRecord.getFromRecipient().getChatColors().asSingleColor() );
+    
+    return if (!conversationMessage.messageRecord.isOutgoing) {
+      conversationMessage.messageRecord.getFromRecipient().getChatColors().asSingleColor()
+    } else {
+      if (conversationContext.hasWallpaper()) {
+        ContextCompat.getColor(context, R.color.conversation_item_recv_bubble_color_wallpaper)
+      } else {
+        ContextCompat.getColor(context, R.color.conversation_item_recv_bubble_color_normal)
+      }
+    }
   }
 
   @ColorInt
