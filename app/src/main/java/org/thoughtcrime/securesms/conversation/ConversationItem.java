@@ -825,6 +825,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   /// MessageRecord Attribute Parsers
 
   private void setBubbleState(MessageRecord messageRecord, @NonNull Recipient recipient, boolean hasWallpaper, @NonNull Colorizer colorizer) {
+    Log.d("### Chat V1 Colour for : ", recipient.getDisplayName(context) + "\tis " + recipient.getChatColors().asSingleColor() );
     this.hasWallpaper = hasWallpaper;
 
     ViewUtil.updateLayoutParams(bodyBubble, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
