@@ -259,12 +259,11 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
     bodyBubbleDrawable.setCorners(shapeDelegate.cornersLTR)
     if (binding.body.isJumbomoji) {
       bodyBubbleDrawable.setLocalChatColors(transparentChatColors)
-    } else if (binding.isOutgoing) {
-      bodyBubbleDrawable.setLocalChatColors(ChatColors.forColor(ChatColors.Id.NotSet, themeDelegate.getBodyBubbleColor(conversationMessage)))
     } else {
       bodyBubbleDrawable.clearLocalChatColors()
     }
-
+    
+    bodyBubbleDrawable.setLocalChatColors(ChatColors.forColor(ChatColors.Id.NotSet, themeDelegate.getBodyBubbleColor(conversationMessage)))
     binding.reply.setBackgroundColor(themeDelegate.getReplyIconBackgroundColor())
 
     itemView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
