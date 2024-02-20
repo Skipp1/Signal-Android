@@ -316,7 +316,8 @@ android {
     create("spinner") {
       initWith(getByName("debug"))
       isDefault = false
-      isMinifyEnabled = false
+      isDebuggable = false
+      isMinifyEnabled = true
       matchingFallbacks += "debug"
       buildConfigField("String", "BUILD_VARIANT_TYPE", "\"Spinner\"")
     }
@@ -328,7 +329,6 @@ android {
       isMinifyEnabled = true
       matchingFallbacks += "debug"
       buildConfigField("String", "BUILD_VARIANT_TYPE", "\"Perf\"")
-      buildConfigField("boolean", "TRACING_ENABLED", "true")
     }
 
     create("benchmark") {
