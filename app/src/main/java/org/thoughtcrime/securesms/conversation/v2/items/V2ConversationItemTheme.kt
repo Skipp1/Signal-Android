@@ -71,11 +71,11 @@ class V2ConversationItemTheme(
       return Color.TRANSPARENT
     }
 
-    Log.d("### Chat V2 Colour for : ", conversationMessage.messageRecord.getFromRecipient().getDisplayName(context)
-        + "\tis "+conversationMessage.messageRecord.getFromRecipient().getChatColors().asSingleColor() );
+//     Log.d("### Chat V2 Colour for : ", conversationMessage.messageRecord.getFromRecipient().getDisplayName(context)
+//         + "\tis "+conversationMessage.messageRecord.getFromRecipient().getChatColors().asSingleColor() );
     
     return if (!conversationMessage.messageRecord.isOutgoing) {
-      conversationMessage.messageRecord.getFromRecipient().getChatColors().asSingleColor()
+      conversationMessage.messageRecord.getFromRecipient().chatColors.asSingleColor()
     } else {
       if (conversationContext.hasWallpaper()) {
         ContextCompat.getColor(context, R.color.conversation_item_recv_bubble_color_wallpaper)
